@@ -19,11 +19,22 @@ Route::get('/', function () {
 
 Route::namespace('App\Http\Controllers')->group(function () 
 {
+    //Read all the Posts
     Route::get('/post','PostController@index');
-    Route::get('/post/create','PostController@create');
 
-    Route::post('/post','PostController@store');
-    Route::get('/post/{id}/edit','PostController@edit');
+    //Create a new post
+    Route::get('/post/create','PostController@create'); //View
+    Route::post('/post','PostController@store'); //Logical Part
+
+    //Edit a POST
+    Route::get('/post/{id}/edit','PostController@edit'); //View
+    Route::post('/post/{id}','PostController@update'); //Logical Part
+
+    //Show individual data
+    Route::get('/post/{id}','PostController@show');
+
+    //Delete an indicidual post
+    Route::delete('/post/{id}','PostController@destroy');
 
 
 });

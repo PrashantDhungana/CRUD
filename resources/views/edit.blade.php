@@ -14,16 +14,15 @@
     </div>
 @endif
     <div class="container">
-    <form action="/post" method="POST">
+    <form action="/post/{{$posts->id}}" method="POST">
         @csrf
-
         @error('title')
         <div class="alert alert-danger">Please enter the title</div>
         @enderror
 
-        Title:<input type="text" name="title"><br>
-        Body: <textarea name="body" > </textarea>
-        <button class="btn btn-primary">Create new Post</button>
+        Title:<input type="text" name="title" value="{{$posts->title}}"><br>
+        Body: <textarea name="body">{{$posts->body}}</textarea>
+        <button class="btn btn-success">Edit Post</button>
     </form>
     </div>
 </body>

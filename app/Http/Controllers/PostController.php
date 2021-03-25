@@ -17,6 +17,9 @@ class PostController extends Controller
         //Read
 
         $posts = Post::all();
+        // dd($posts);
+        // $JSONfile = json_encode($posts);
+        // dd($JSONfile);
         return view('main',compact('posts'));
     }
 
@@ -47,9 +50,6 @@ class PostController extends Controller
             'body' => 'required',
         ]);
         
-        // $post = new Post;
-        // $post->title = $request->title;
-        // $post->body = $request->body;
 
         $post = Post::create([
             'title' => $request->title,
@@ -57,11 +57,11 @@ class PostController extends Controller
         ]);
 
         if($post){
-            echo("Inserted Successfully");
+            //Redirect with Flash message
+            return redirect('/post')->with('status', 'Post added Successfully!');
         }
         else{
-            echo("There was an error");
-
+            return redirect('/post/create')->with('status', 'There was an error!');
         }
 
     }
@@ -75,7 +75,9 @@ class PostController extends Controller
     public function show($id)
     {
         //Read individual
-
+        // $posts = Post::find(3)->get();
+        $posts = Post::findOrFail($id);
+        return view('show',compact('posts'));
         //
     }
 
@@ -88,8 +90,8 @@ class PostController extends Controller
     public function edit($id)
     {
         //Update View
-        
-        //
+        $posts = Post::where('id',$id)->first();
+        return view('edit',compact('posts'));
     }
 
     /**
@@ -102,7 +104,18 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         //Update
+        $posts = Post::find($id)->first();
 
+        $posts->title = $request->title;
+        $posts->body = $request->body;
+
+        if($posts->save()){
+            return redirect('/post')->with('status', 'Post edited Successfully!');
+        }
+        else{
+            return redirect('/post/$id/edit')->with('status', 'There was an error');
+
+        }
         //
     }
 
@@ -115,8 +128,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         //Delete
+        $posts = Post::find($id);
+        if($posts->delete()){
+            return redirect('/post')->with('status', 'Post was deleted successfully');
+        }
+        else return redirect('/post')->with('status', 'There was an error');
 
-
-        //
+        
     }
 }
